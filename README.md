@@ -48,5 +48,5 @@ git clone git@github.com:zhuyutrisla/vue-apicloud-notebook.git
 
 
 
-#### Licese
+#### License
 MIT
