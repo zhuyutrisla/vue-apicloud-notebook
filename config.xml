@@ -1,0 +1,52 @@
+ <widget id="A6062249932054"  version="0.0.1">
+
+    <name>记事本</name>
+
+    <description>
+
+        这是一个综合 Vue 以及 Apicloud 开发的记事本项目
+
+    </description>
+
+    <author email="developer@apicloud.com" href="http://www.apicloud.com">
+
+        Developer
+
+    </author>
+
+    <content src="index.html" />
+
+    <access origin="*" />
+
+    <preference name="pageBounce" value="false"/>
+
+	<preference name="appBackground" value="rgba(0,0,0,0.0)"/>
+
+	<preference name="windowBackground" value="rgba(0,0,0,0.0)"/>
+
+	<preference name="frameBackgroundColor" value="rgba(0,0,0,0.0)"/>
+
+	<preference name="hScrollBarEnabled" value="false"/>
+
+	<preference name="vScrollBarEnabled" value="false"/>
+
+	<preference name="autoLaunch" value="true"/>
+
+	<preference name="fullScreen" value="false"/>
+
+	<preference name="autoUpdate" value="false" />
+
+	<preference name="smartUpdate" value="false" />
+
+	<preference name="debug" value="false"/>
+
+	<preference name="statusBarAppearance" value="true"/>
+
+	<permission name="camera" />
+
+	<permission name="fileSystem" />
+
+	<permission name="internet" />
+
+</widget>
+

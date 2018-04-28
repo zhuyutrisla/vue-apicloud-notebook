@@ -1,0 +1,469 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width,viewport-fit=cover"
+  />
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>日记</title>
+  <link rel="stylesheet" type="text/css" href="../css/api.css" />
+  <link rel="stylesheet" type="text/css" href="../css/ydui.rem.css" />
+  <link rel="stylesheet" type="text/css" href="../css/normal.css" />
+  <link rel="stylesheet" type="text/css" href="../css/main.css" />
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <header class="tophead">
+      <span class="headWord" v-if="!showDelete">记事本</span>
+      <span class="headWord" v-else @click="cancelDelete">
+        <img src="../image/left.png" alt=""> 已选择{{count}}项</span>
+      <span class="headImg" v-if="!showDelete" @click="changeShowList()">
+        <img src="../image/mainHead.png" alt="" srcset="" v-show="listFirst">
+        <img src="../image/listHead.png" alt="" srcset="" v-show="!listFirst">
+      </span>
+      <span class="headImg" v-else @click="deleteAll()">
+        全部选择
+      </span>
+    </header>
+    <section class="contain" v-show="listFirst" v-if="thingGroup.length" @click="cancelDelete">
+      <div class="thingWrapper" v-for="(item,index) in thingGroup" :key="index">
+        <span class="time">{{item.date}}</span>
+        <div class="allthing">
+          <div class="initThing" v-for="(item,index2) in item.things" :key="index2" v-finger:long-tap='deleteThing'>
+            <div class="initMotal" v-if="showDelete">
+              <img src="../image/select.png" alt="" v-if="item.delete == 2" @click.stop="delectThing(index,index2)">
+              <img src="../image/noselect.png" alt="" v-else @click.stop="delectThing(index,index2)">
+            </div>
+            <span class="tipColor" :class="item.classify"></span>
+            <h3 class="initTitle">
+              <img src="../image/rednoselect.png" alt="" v-if="item.backlog == 2 && item.cstatus == 1" @click.stop='changeHandle(index,index2)'>
+              <img src="../image/redselect.png" alt="" v-if="item.backlog == 2 && item.cstatus == 2" @click.stop='changeHandle(index,index2)'>
+              <span @click.self.stop="gotoDetail(index,index2)">{{item.header}}</span>
+            </h3>
+            <p class="initContent" :class="{ handle: item.backlog == 2 && item.cstatus == 2 }" @click.self.stop="gotoDetail(index,index2)">{{item.body}}</p>
+            <span class="messageIcon">
+              <img src="../image/message.png" alt="" srcset="" v-if="item.notice">
+              <img src="../image/picture.png" alt="" srcset="" v-if="item.img">
+            </span>
+            <span class="initTime">{{item.ctime}}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="contain" v-show="!listFirst" v-if="thingGroup.length" @click="cancelDelete">
+      <div class="thingWrapper" v-for="(item,index) in thingGroup" :key="index">
+        <span class="time">{{item.date}}</span>
+        <div class="allthing">
+          <div class="tabinitThing" v-for="(item,index2) in item.things" :key="index2" :class="item.classify" v-finger:long-tap='deleteThing'>
+            <div class="initMotal" v-if="showDelete">
+              <img src="../image/select.png" alt="" v-if="item.delete == 2" @click.stop="delectThing(index,index2)">
+              <img src="../image/noselect.png" alt="" v-else @click.stop="delectThing(index,index2)">
+            </div>
+            <h3 class="initTitle">
+              <img src="../image/rednoselect.png" alt="" v-if="item.backlog == 2 && item.cstatus == 1" @click.stop='changeHandle(index,index2)'>
+              <img src="../image/redselect.png" alt="" v-if="item.backlog == 2 && item.cstatus == 2" @click.stop='changeHandle(index,index2)'>
+              <span @click.self.stop="gotoDetail(index,index2)">{{item.header}}</span>
+            </h3>
+            <div class="contentwrapper">
+              <p class="initContent" :class="{ handle: item.backlog == 2 && item.cstatus == 2 }" @click.self.stop="gotoDetail(index,index2)">{{item.body}}</p>
+              <img :src="item.img" alt="" v-if="item.img" @click.self.stop="gotoDetail(index,index2)">
+            </div>
+            <span class="tabmessageIcon">
+              <img src="../image/message.png" alt="" srcset="" v-if="item.notice">
+              <img src="../image/picture.png" alt="" srcset="" v-if="item.img">
+            </span>
+            <span class="tabinitTime">{{item.ctime}}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section v-if="!thingGroup.length" class="showNoNote">
+      <div class="noNoteContain" @click="startMake()">
+        <img src="../image/nonote.png" alt="">
+        <p>还没有内容哦</p>
+        <div class="hurryup">马上创建</div>
+      </div>
+    </section>
+    <footer v-if="showDelete">
+      <div @click="deleteIcon()">
+        <img src="../image/deleteicon.png" alt="" srcset="">
+      </div>
+    </footer>
+  </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/ydui.rem.js"></script>
+<script type="text/javascript" src="../script/fastclick.js"></script>
+<script type="text/javascript" src="../script/alloy_finger.js"></script>
+<script type="text/javascript" src="../script/alloy_finger.vue.js"></script>
+<script type="text/javascript">
+  var width = document.documentElement.clientWidth;
+
+  var scale = width / 7.5;
+  var css = "html{ font-size: " + scale + "px; ";
+
+  document.write("<style>" + css + "</style>");
+
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function () {
+      FastClick.attach(document.body);
+    }, false);
+  }
+</script>
+<script type="text/javascript">
+  apiready = function () {
+    api.setStatusBarStyle({
+      style: 'light',
+      color: '#fff'
+    })
+    var NVTabBar = api.require('NVTabBar');
+    if (api.winWidth == 375 && api.winHeight == 812) {
+      var abc = 26.0;
+      var tabH = 78;
+      var bg_marginB = 30;
+      var title_marginB = 30
+    } else {
+      var abc = 6.0;
+      var tabH = 47;
+      var bg_marginB = 10;
+      var title_marginB = 3
+    }
+    NVTabBar.open({
+      styles: {
+        bg: '#fff',
+        h: tabH,//47
+        dividingLine: {
+          width: 0,
+          color: '#000'
+        },
+        badge: {
+          bgColor: '#ff0',
+          numColor: '#fff',
+          size: 6.0,
+          centerX: 40,
+          centerY: 6
+        }
+      },
+      items: [{
+        w: api.winWidth / 3.0,
+        bg: {
+          marginB: -1,
+          image: '#fff'
+        },
+        iconRect: {
+          w: 25.0,
+          h: 25.0,
+        },
+        icon: {
+          normal: 'widget://image/nav1.png',
+          highlight: 'widget://image/nav1.png',
+          selected: 'widget://image/nav1.png'
+        },
+        title: {
+          text: '搜索',
+          size: 12.0,
+          normal: '#696969',
+          selected: '#696969',
+          marginB: title_marginB
+        }
+      }, {
+        w: api.winWidth / 3.0,
+        bg: {
+          marginB: bg_marginB
+        },
+        iconRect: {
+          w: 40.0,
+          h: 40.0,
+        },
+        icon: {
+          normal: 'widget://image/nav2.png',
+          highlight: 'widget://image/nav2.png',
+          selected: 'widget://image/nav2.png'
+        },
+        title: {
+          text: '新建',
+          size: 12.0,
+          normal: '#696969',
+          selected: '#696969',
+          marginB: title_marginB
+        }
+      }, {
+        w: api.winWidth / 3.0,
+        bg: {
+          marginB: -1,
+          image: '#fff'
+        },
+        iconRect: {
+          w: 25.0,
+          h: 25.0,
+        },
+        icon: {
+          normal: 'widget://image/nav3.png',
+          highlight: 'widget://image/nav3.png',
+          selected: 'widget://image/nav3.png'
+        },
+        title: {
+          text: '设置',
+          size: 12.0,
+          normal: '#696969',
+          selected: '#696969',
+          marginB: title_marginB
+        }
+      }],
+      selectedIndex: 0
+    }, function (ret, err) {
+      var currentInex = ret.index
+      switch (currentInex) {
+        case 0:
+          api.openWin({
+            name: 'search',
+            url: './search.html',
+            bounces: false,
+            rect: {
+              x: 0,
+              y: 0,
+              w: 'auto',
+              h: 'auto'
+            }
+          });
+          break;
+        case 1:
+          api.openWin({
+            name: 'editPage',
+            url: './editPage.html',
+            bounces: false,
+            rect: {
+              x: 0,
+              y: 0,
+              w: 'auto',
+              h: 'auto'
+            }
+          });
+          break;
+        case 2:
+          api.openWin({
+            name: 'config',
+            url: './config.html',
+            bounces: false,
+            rect: {
+              x: 0,
+              y: 0,
+              w: 'auto',
+              h: 'auto'
+            }
+          });
+          api.setFrameGroupIndex({
+            name: 'group1',
+            index: 2
+          });
+          api.sendEvent({
+            name: 'reloadInformation'
+          })
+          break;
+        case 3:
+
+          api.openFrame({
+            name: 'config',
+            url: './config.html',
+            bounces: false,
+            rect: {
+              x: 0,
+              y: 0,
+              w: 'auto',
+              h: 'auto'
+            }
+          });
+          break;
+        default:
+          api.setFrameGroupIndex({
+            name: 'group1',
+            index: 0
+          });
+
+      }
+    });
+    Vue.use(AlloyFingerVue)
+    var fvm = new Vue({
+      el: '#app',
+      data: {
+        listFirst: false,   //  样式1
+        showDelete: false,  //  样式2
+        count: 0,           //  统计选择
+        thingGroup: [
+          {
+            "date": "28/04月 今天",
+            "things": [
+              {
+                "classify": "live",    // 分类
+                "header": "这是个待办",
+                "body": "18:00跑步,18:30吃饭",
+                "backlog": "2",  // 待办标识1、不是待办事项2、相反
+                "ntime": "2018-4-28 10:00",   // 提醒时间
+                "img": "http://www.acglingsheng8.com/uploads/allimg/120907/1-120ZH102060-L.jpg",   // 图片地址
+                "cstatus": "1", // 完成状态1、未完成2、已完成
+                "ctime": "11:37",   // 创建时间
+
+              }
+            ]
+          },
+          {
+            "date": "27/04月 昨天",
+            "things": [
+              {
+                "classify": "work",    // 分类
+                "header": "工作代办",
+                "body": "撸代码",
+                "backlog": "1",  // 待办标识1、不是待办事项2、相反
+                "ntime": "2018-4-27 10:00",   // 提醒时间
+                "img": "",   // 图片地址
+                "cstatus": "2", // 完成状态1、未完成2、已完成 ['live', 'work', 'study', 'tourism', 'inspiration']
+                "ctime": "11:37",   // 创建时间
+
+              }
+            ]
+          }          
+        ]
+      },
+      methods: {
+        //马上创建
+        startMake: function startMake() {
+          api.openWin({
+            name: 'search',
+            url: './editPage.html',
+            bounces: false,
+            rect: {
+              x: 0,
+              y: 0,
+              w: 'auto',
+              h: 'auto'
+            }
+          });
+        },
+        //进入详情
+        gotoDetail: function gotoDetail(index, index2) {
+          //todo
+        },
+        //改变代办
+        changeHandle: function changeHandle(index, index2) {
+          var bindex = index
+          var sindex = index2
+          var self = this
+          if (this.thingGroup[bindex].things[sindex].cstatus == 1) {
+            api.confirm({
+              title: '提示',
+              msg: '是否把该待办事项切换成已完成状态',
+              buttons: ['取消', '确定']
+            }, function (ret, err) {
+              var index = ret.buttonIndex;
+              if (index == 2) {
+                self.thingGroup[bindex].things[sindex].cstatus = 2
+              }
+            });
+          } else {
+            api.confirm({
+              title: '提示',
+              msg: '是否把该待办事项切换成未完成状态',
+              buttons: ['取消', '确定']
+            }, function (ret, err) {
+              var index = ret.buttonIndex;
+              if (index == 2) {
+                self.thingGroup[bindex].things[sindex].cstatus = 1
+              }
+            });
+          }
+        },
+        changeShowList: function changeShowList() {
+          this.listFirst = !this.listFirst
+        },
+        deleteThing: function deleteThing() {
+          this.showDelete = true
+          var NVTabBar = api.require('NVTabBar');
+          NVTabBar.hide({
+            animation: false
+          });
+        },
+        cancelDelete: function cancelDelete() {
+          this.showDelete = false
+          var NVTabBar = api.require('NVTabBar');
+          NVTabBar.show({
+            animation: false
+          });
+          for (var i = 0; i < this.thingGroup.length; i++) {
+            for (var j = 0; j < this.thingGroup[i].things.length; j++) {
+              this.thingGroup[i].things[j].delete = 1
+            }
+          }
+          this.count = 0
+        },
+        delectThing: function delectThing(index, index2) {
+          this.thingGroup[index].things[index2].delete == 1 ? this.thingGroup[index].things[index2].delete = 2 : this.thingGroup[index].things[index2].delete = 1
+          var sum = 0
+          for (var i = 0; i < this.thingGroup.length; i++) {
+            for (var j = 0; j < this.thingGroup[i].things.length; j++) {
+              if (this.thingGroup[i].things[j].delete == 2) {
+                sum += 1
+              }
+            }
+          }
+          this.count = sum
+        },
+        deleteAll: function deleteAll() {
+          if (this.count) {
+            for (var i = 0; i < this.thingGroup.length; i++) {
+              for (var j = 0; j < this.thingGroup[i].things.length; j++) {
+                this.thingGroup[i].things[j].delete = 1
+              }
+            }
+            this.count = 0
+          } else {
+            var sum = 0
+            for (var i = 0; i < this.thingGroup.length; i++) {
+              for (var j = 0; j < this.thingGroup[i].things.length; j++) {
+                sum += 1
+                this.thingGroup[i].things[j].delete = 2
+              }
+            }
+            this.count = sum
+          }
+        },
+        deleteIcon: function deleteIcon() {
+          var self = this
+          var transferGroup = JSON.parse(JSON.stringify(this.thingGroup))
+          for (var i = 0; i < this.thingGroup.length; i++) {
+            for (var j = 0; j < this.thingGroup[i].things.length; j++) {
+              if (this.thingGroup[i].things[j].delete == 2) {
+                transferGroup[i].things.splice(j,1)
+                if (!transferGroup[i].things.length){
+                  transferGroup.splice(i,1)
+                }
+              }
+            }
+          }
+          api.confirm({
+            title: '',
+            msg: '是否删除所选项',
+            buttons: ['否', '是']
+          }, function (ret, err) {
+            var tindex = ret.buttonIndex;
+            if (tindex == 2) {
+              self.thingGroup = transferGroup
+              self.showDelete = false
+              var NVTabBar = api.require('NVTabBar');
+              NVTabBar.show({
+                animation: false
+              });
+            }
+          });
+        }
+      },
+      mounted: function mounted() {
+      }
+    });
+  };
+
+</script>
+
+</html>

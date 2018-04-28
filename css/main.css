@@ -1,0 +1,323 @@
+.tophead {
+  width: 100%;
+  padding-top: .28rem;
+  height: 1.28rem;
+  font-size: .3rem;
+  line-height: 1.28rem;
+  color: #fff;
+  background: #1CBB9D;
+  display: flex;
+  justify-content: space-between;
+  align-items: initial;
+}
+
+.headWord {
+  padding-left: .2rem;
+  width: 50%;
+  position: relative;
+}
+
+.headWord img {
+  position: relative;
+  top: .08rem;
+  padding-top: .3rem;
+  height: .7rem;
+}
+
+.headImg {
+  padding-right: .2rem;
+  width: 50%;
+  text-align: right;
+}
+
+.headImg img {
+  position: relative;
+  top: .13rem;
+  width: .48rem;
+  height: .48rem;
+}
+
+.contain {
+  background: #F5F5F5;
+  width: 100%;
+  height: 83vh;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.thingWrapper {
+  position: relative;
+}
+
+.time {
+  position: absolute;
+  top: .2rem;
+  left: .2rem;
+  z-index: 10;
+  font-size: .34rem;
+}
+
+.time::before {
+  content: '';
+  width: .15rem;
+  height: .15rem;
+  border-radius: 100%;
+  background: #696969;
+  position: absolute;
+  left: 4.35%;
+  bottom: -45%;
+}
+
+.allthing {
+  margin-left: 12%;
+  padding-top: .8rem;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.allthing::before {
+  position: absolute;
+  content: '';
+  width: 1px;
+  left: -8.27%;
+  height: 85%;
+  border: 1px solid #696969;
+  z-index: 6;
+}
+
+.thingWrapper:first-child .time {
+  color: #1CBB9D;
+}
+
+.thingWrapper:first-child .time::before {
+  background: #1CBB9D;
+}
+
+.thingWrapper:first-child .allthing::before {
+  border: 1px solid #1CBB9D;
+}
+
+.initThing {
+  width: 3rem;
+  min-height: 2.46rem;
+  background: #fff;
+  margin-right: .2rem;
+  margin-bottom: .2rem;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  border-radius: .06rem;
+  position: relative;
+}
+
+
+.initTitle {
+  font-size: .32rem;
+  color: rgb(51, 51, 51);
+  padding-top: .29rem;
+  padding-left: .2rem;
+  width: 90%;
+
+  display: flex;
+  align-items: center;
+
+}
+
+.initTitle span {
+  width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+}
+
+.initTitle img {
+  width: .56rem;
+  margin-right: .15rem;
+
+}
+
+.initContent {
+  font-size: .24rem;
+  padding-top: .2rem;
+  padding-left: .2rem;
+  color: rgb(153, 153, 153);
+  width: 90%;
+  word-break: break-all;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.initContent.handle {
+  text-decoration: line-through;
+}
+
+.initTime {
+  position: absolute;
+  bottom: .2rem;
+  right: .2rem;
+  color: rgb(153, 153, 153);
+}
+
+.contentwrapper {
+  padding-bottom: .5rem;
+  display: flex;
+}
+
+.contentwrapper img {
+  width: .9rem;
+  height: .9rem;
+  margin-left: .3rem;
+  margin-right: .25rem;
+}
+
+.tipColor {
+  width: .15rem;
+  height: .15rem;
+  border-radius: 100%;
+  position: absolute;
+  top: .15rem;
+  right: .15rem;
+}
+
+.tipColor.live {
+  background: #FD9B99;
+}
+
+.tipColor.work {
+  background: #ADD8EB;
+}
+
+.tipColor.study {
+  background: #AED77D;
+}
+
+.tipColor.tourism {
+  background: #C7ECE4;
+}
+
+.tipColor.inspiration {
+  background: #F8CCAB;
+}
+
+.messageIcon {
+  position: absolute;
+  right: .9rem;
+  bottom: 0;
+}
+
+.messageIcon img {
+  width: .6rem;
+  height: .6rem;
+}
+
+.tabinitThing {
+  width: 6.29rem;
+  min-height: 1.84rem;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  border-radius: .06rem;
+  margin-bottom: .2rem;
+  background: #fff;
+  position: relative;
+}
+
+.tabinitTime {
+  position: absolute;
+  bottom: .1rem;
+  left: .2rem;
+  color: rgb(153, 153, 153);
+}
+
+.tabmessageIcon {
+  position: absolute;
+  left: .9rem;
+  bottom: -0.1rem;
+}
+
+.tabmessageIcon img {
+  width: .6rem;
+  height: .6rem;
+}
+
+.tabinitThing.live {
+  border-left: .11rem solid rgb(252, 157, 154);
+}
+
+.tabinitThing.work {
+  border-left: .11rem solid #ADD8EB;
+}
+
+.tabinitThing.study {
+  border-left: .11rem solid #AED77D;
+}
+
+.tabinitThing.tourism {
+  border-left: .11rem solid #C7ECE4;
+}
+
+.tabinitThing.inspiration {
+  border-left: .11rem solid #F8CCAB;
+}
+
+.initMotal {
+  position: absolute;
+  z-index: 20;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.initMotal img {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: .2rem;
+  right: .2rem;
+}
+
+footer {
+  position: fixed;
+  width: 100%;
+  height: .98rem;
+  background: #fff;
+  z-index: 20;
+  bottom: 0;
+  text-align: center;
+  line-height: 1rem;
+}
+
+footer img {
+  margin-top: .2rem;
+  width: .48rem;
+  height: .48rem;
+
+}
+
+.showNoNote {
+  height: 90vh;
+  overflow: hidden;
+  background: white;
+  text-align: center;
+}
+
+.noNoteContain {
+  padding-top: 20%;
+}
+
+.showNoNote p {
+  font-size: 20px;
+  color: #666;
+  padding-top: .5rem;
+}
+
+.hurryup {
+  width: 40%;
+  margin: .3rem auto 0 auto;
+  height: .8rem;
+  background: #17CFC1;
+  color: white;
+  line-height: .8rem;
+  font-size: 20px;
+  border-radius: 3px;
+}

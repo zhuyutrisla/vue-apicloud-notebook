@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"
+  />
+  <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+  <title>回收站</title>
+  <link rel="stylesheet" type="text/css" href="../css/api.css" />
+  <link rel="stylesheet" type="text/css" href="../css/ydui.rem.css" />
+  <link rel="stylesheet" type="text/css" href="../css/normal.css" />
+  <link rel="stylesheet" type="text/css" href="../css/recycleBin.css" />
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <div class="my_container">
+      <div class="header_top only_comeback">
+        <yd-navbar color="#FFF" bgcolor="#1CBB9D">
+          <router-link to="" slot="left" @click="comeback_upper()">
+            <img class="headWordImg" src="../image/left.png" alt="">
+            <span class="headWordShow" >{{title}}</span>
+          </router-link>
+          <router-link to="" slot="right">
+            <div style="color:#fff;font-size:17px;position: relative;top:.13rem;" @click="clearAllNews()">清空</div>
+          </router-link>
+        </yd-navbar>
+      </div>
+
+      <div class="showNotice" v-if="!list_childList.length">
+        <img src="../image/hui.png" alt="">
+        <p>回收站没有东西哦</p>
+      </div>
+
+      <div class="big_box">
+        <div class="list_child" v-for="(item,index) in list_childList" :key='index' @click="randomSwitchBtn(index);">
+          <div class="is_title">
+            <span class="is_title_xian">{{item.header}}</span>
+            <div class="huifu" v-if="item.recovery" style="background-color:#1CBB9D;" @click.self.stop="recovery_cont(item.tid)">恢复</div>
+          </div>
+          <div class="cont" :class="{ active: item.active }">{{item.body}}</div>
+          <div class="positionBox">
+            <div class="absolute">
+              <img src="../image/buttonUp.png" alt="" style="width:0.44rem;height:0.44rem;" v-if="item.active">
+              <img src="../image/bottom.png" style="width:0.44rem;height:0.44rem;" alt="" v-else>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/ydui.rem.js"></script>
+<script type="text/javascript" src="../script/fastclick.js"></script>
+
+<script type="text/javascript">
+  var width = document.documentElement.clientWidth;
+
+  var scale = width / 7.5;
+  var css = "html{ font-size: " + scale + "px; ";
+
+  document.write("<style>" + css + "</style>");
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function () {
+      FastClick.attach(document.body);
+    }, false);
+  }
+</script>
+<script>
+  apiready = function apiready() {
+    new Vue({
+      el: '#app',
+      data: {
+        title: "回收站",
+        showNotice: false,
+        list_childList: []
+      },
+      methods: {
+        //展开收起
+        randomSwitchBtn: function randomSwitchBtn(index) {
+          this.list_childList[index].active = !this.list_childList[index].active
+          this.list_childList[index].recovery = !this.list_childList[index].recovery
+        },
+        comeback_upper: function comeback_upper() {
+          api.closeWin();
+        },
+        recovery_cont: function recovery_cont(tid) {
+          var self = this
+          api.confirm({
+            title: '',
+            msg: '确定恢复？',
+            buttons: ['否', '是']
+          }, function (ret, err) {
+            var index = ret.buttonIndex;
+            if (index == 2) {
+            }
+          });
+        },
+        clearAllNews: function clearAllNews() {
+          var self = this
+          if (this.list_childList.length == 0) {
+
+          } else {
+            api.confirm({
+              title: '',
+              msg: '是否清空回收站？',
+              buttons: ['否', '是']
+            }, function (ret, err) {
+              var index = ret.buttonIndex;
+              if (index == 2) {
+
+              }
+            });
+          }
+        }
+      },
+      mounted: function mounted() {
+      }
+    });
+  };
+
+</script>
+
+</html>

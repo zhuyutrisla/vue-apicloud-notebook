@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"
+	/>
+	<meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+	<title>消息中心</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../css/ydui.rem.css" />
+	<link rel="stylesheet" type="text/css" href="../css/normal.css" />
+	<link rel="stylesheet" type="text/css" href="../css/massageCenter.css" />
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<div class="my_container">
+			<div class="header_top only_comeback" >
+				<yd-navbar color="#FFF" bgcolor="#1CBB9D">
+					<router-link to="" slot="left" @click="comeback_upper()" >
+						<img class="headWordImg" src="../image/left.png" alt="">
+						<span class="headWordShow">{{title}}</span>
+					</router-link>
+					<router-link to="" slot="right">
+						<div style="color:#fff;font-size:17px;position: relative;top:.13rem;" @click="clearAllNews()">清空</div>
+					</router-link>
+				</yd-navbar>
+			</div>
+			<div class="showNotice" v-if="!list_childList.length">
+				<img src="../image/nomessage.png" alt="">
+				<p>你还没有收到消息唉</p>
+			</div>
+			<div class="big_box" v-else>
+				<!--最外框 -->
+				<div class="list_child" @click="randomSwitchBtn(index);" v-for="(item,index) in list_childList" :key='index'>
+					<div class="is_title">{{item.title}}</div>
+					<div class="cont" :class="{ active: item.active == 2 }">{{item.content}}</div>
+					<div class="positionBox">
+						<div class="absolute">
+							<img src="../image/buttonUp.png" style="width:0.44rem;height:0.44rem;" v-if="item.active == 2">
+							<img src="../image/bottom.png" style="width:0.44rem;height:0.44rem;" v-else>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/ydui.rem.js"></script>
+<script type="text/javascript" src="../script/fastclick.js"></script>
+
+<script type="text/javascript">
+	var width = document.documentElement.clientWidth;
+
+	var scale = width / 7.5;
+	var css = "html{ font-size: " + scale + "px; ";
+
+	document.write("<style>" + css + "</style>");
+
+	if ('addEventListener' in document) {
+		document.addEventListener('DOMContentLoaded', function () {
+			FastClick.attach(document.body);
+		}, false);
+	}
+</script>
+<script>
+
+
+	apiready = function apiready() {
+		new Vue({
+			el: '#app',
+			data: {
+				title: "消息中心",
+				list_childList: [{ "ctime": "2018-04-28 11:03:11", "title": "使用说明", "content": "这是一款轻便的便签笔记应用，支持待办清单，图片文字格式，让你不仅能够记录待办，还可以轻松记录生活点滴！感谢您的使用！", "active": 1 }],
+			},
+			methods: {
+				click_naviga_news_detail: function click_naviga_news_detail(id) {
+					var targetId = id;
+					api.openWin({
+						name: 'newsDeail',
+						url: './newsDeail.html',
+						bounces: false,
+						rect: {  
+							x: 0,
+							y: 0,
+							w: 'auto',
+							h: 'auto'
+						},
+						pageParam: {
+							id: targetId
+						}
+					});
+				},
+				//清空
+				clearAllNews: function clearAllNews() {
+					var self = this
+					api.confirm({
+						title: '',
+						msg: '是否清空消息中心？',
+						buttons: ['否', '是']
+					}, function (ret, err) {
+						var index = ret.buttonIndex;
+						if (index === 2) {
+							self.list_childList  = []
+						}
+					});
+				},
+				//展开收起
+				randomSwitchBtn: function randomSwitchBtn(index) {
+					this.list_childList[index].active = this.list_childList[index].active == 2 ? '1' : '2'
+
+				},
+				comeback_upper: function comeback_upper(){
+					api.closeWin();
+				}
+
+			},
+			mounted: function mounted() {
+
+			}
+		});
+	};
+</script>
+
+</html>

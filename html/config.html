@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"
+	/>
+	<meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+	<title>设置</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link rel="stylesheet" type="text/css" href="../css/ydui.rem.css" />
+	<link rel="stylesheet" type="text/css" href="../css/normal.css" />
+	<link rel="stylesheet" type="text/css" href="../css/config.css" />
+</head>
+
+<body>
+	<div id="app" v-cloak>
+		<div class="my_container my_page_box">
+			<div class="header_top only_comeback">
+				<yd-navbar title="" color="#FFF" bgcolor="#1CBB9D">
+					<router-link to="" slot="left" @click="comeback_upper()">
+						<img class="headWordImg" src="../image/left.png" alt="">
+						<span class="headWordShow">设置</span>
+
+				</yd-navbar>
+			</div>
+			<div id="other_click">
+				<div class="click_right">
+					<div class="click_right_box" @click="gotoComment()">
+						<span>消息中心</span>
+						<div class="img_box">
+							<img src="../image/right.png" style="width:0.44rem;height:0.44rem;" alt="">
+						</div>
+						<div class="red_div" v-if="red_div"></div>
+					</div>
+					<div class="click_right_box" @click="gotoRecycleBin()">
+						<span>回收站</span>
+						<div class="img_box">
+							<img src="../image/right.png" style="width:0.44rem;height:0.44rem;" alt="">
+						</div>
+					</div>
+					<div class="click_right_box" @click="showVersion()">
+						<span>检查更新</span>
+						<div class="img_box">
+							<img src="../image/right.png" style="width:0.44rem;height:0.44rem;" alt="">
+						</div>
+						<span class="size">{{version}}</span>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/ydui.rem.js"></script>
+<script type="text/javascript" src="../script/fastclick.js"></script>
+<script type="text/javascript">
+	var width = document.documentElement.clientWidth;
+
+	var scale = width / 7.5;
+	var css = "html{ font-size: " + scale + "px; ";
+
+	document.write("<style>" + css + "</style>");
+	if ('addEventListener' in document) {
+		document.addEventListener('DOMContentLoaded', function () {
+			FastClick.attach(document.body);
+		}, false);
+	}
+</script>
+<script>
+	apiready = function apiready() {
+		var _this = this;
+		var fvm = new Vue({
+			el: '#app',
+			data: {
+				red_div: false,
+				version: 0 //版本
+			},
+			methods: {
+				comeback_upper: function comeback_upper() {
+					api.closeWin();
+				},
+				showVersion: function clearData() {
+					api.toast({
+						msg: `当前版本是${this.version}`,
+						duration: 2000,
+						location: "middle"
+					});
+				},
+				gotoHome: function gotoHome() {
+					api.closeToWin({
+						name: 'root'
+					})
+				},
+				gotoComment: function gotoComment() {
+					api.openWin({
+						name: 'massageCenter',
+						url: './massageCenter.html',
+						bounces: false,
+						rect: {  
+							x: 0,
+							y: 0,
+							w: 'auto',
+							h: 'auto'
+						}
+					});
+				},
+				gotoRecycleBin: function gotoRecycleBin() {
+					api.openWin({
+						name: 'recycleBin',
+						url: './recycleBin.html',
+						bounces: false,
+						rect: {  
+							x: 0,
+							y: 0,
+							w: 'auto',
+							h: 'auto'
+						}
+					});
+				},
+			},
+			mounted: function mounted() {
+				this.version = api.appVersion;
+			}
+		});
+	};
+
+</script>
+
+</html>

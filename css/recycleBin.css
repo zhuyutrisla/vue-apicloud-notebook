@@ -1,0 +1,131 @@
+
+
+    .my_container {
+      position: relative;
+      overflow: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding-top: 1.28rem;
+    }
+
+    .my_container .header_top {
+      width: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      padding-top: 0.28rem;
+      background-color: #1CBB9D;
+    }
+
+
+    .big_box {
+      height: 88vh;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 0 0.4rem;
+      margin-top: .1rem;
+    }
+
+    .big_box .list_child {
+      padding: 0.3rem 0;
+      border-bottom: 2px solid #eee;
+      position: relative;
+      /*border: 0.02rem solid blue;*/
+      min-height: 1.72rem;
+    }
+
+    .is_title:after{
+      content:"";
+      height:0;
+      line-height:0;
+      display:block;
+      visibility:hidden;
+      clear:both;
+    }
+    .big_box .is_title {
+      font-size: 0.3rem;
+      color: rgb(51, 51, 51);
+    }
+    .is_title .is_title_xian{
+      display: inline-block;
+      width:4.2rem;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .big_box .is_title .huifu{
+      font-size: 0.24rem;
+      float: right;
+      border-radius: 0.12rem;
+      color:#fff;
+      margin-right: 0.66rem;
+      padding: 0 0.12rem;
+    }
+
+    .big_box .cont {
+      width: 86%;
+      font-size: 0.24rem;
+      color: rgb(153, 153, 153);
+
+      overflow: hidden;
+      text-align: left;
+      word-break: break-all;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+    .big_box .cont.active {
+        -webkit-line-clamp: 999;
+    }
+
+    .big_box .positionBox {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      /*border-left: 0.02rem solid red;*/
+      /*border: 0.02rem solid #ccc;*/
+      padding:0.16rem 0 0.16rem 0.06rem;
+    }
+    .positionBox .absolute{
+      position: relative;
+      width: 0.5rem;
+      height: 100%;
+    }
+    .positionBox .absolute img{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      overflow: hidden;
+      -webkit-transition-property: -webkit-transform,opacity;
+      transition-property: transform,opacity;
+      transform: translate(-50%, -50%);
+    }
+    .showNotice {
+        padding-top: 25%;
+        line-height: 1rem;
+        text-align: center;
+        color: #666;
+        font-size: 0.32rem;
+    }
+    .showNotice img {
+        width: 60%;
+    }
+
+    .headWordImg {
+      position: relative;
+      top: .08rem;
+      padding-top: .3rem;
+      height: .7rem;
+    }
+
+    .headWordShow {
+      color: #fff;
+      font-size: 17px;
+      position: relative;
+      bottom: .015rem;
+    }
+
+    .yd-navbar-item {
+      overflow: visible;
+    }

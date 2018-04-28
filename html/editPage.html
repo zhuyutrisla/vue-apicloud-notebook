@@ -1,0 +1,331 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width,viewport-fit=cover"
+  />
+  <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+  <title>编辑页面</title>
+  <link rel="stylesheet" type="text/css" href="../css/api.css" />
+  <link rel="stylesheet" type="text/css" href="../css/ydui.rem.css" />
+  <link rel="stylesheet" type="text/css" href="../css/normal.css" />
+  <link rel="stylesheet" type="text/css" href="../css/editPage.css" />
+</head>
+
+<body>
+  <div id="app" v-cloak style="position: relative;">
+    <div class="my_container">
+      <div class="header_top only_comeback">
+        <yd-navbar color="#FFF" bgcolor="#1CBB9D">
+          <router-link to="" slot="left" @click="comeback_upper()">
+            <img class="headWordImg" src="../image/left.png" alt="">
+            <span style="color:#FFF;font-size:16px;margin-top:.15rem;width:50%;">
+              <span v-if="firstShowTime" style="margin-top:0rem">{{showDateTIme}}</span>
+            </span>
+          </router-link>
+
+          <router-link to="" slot="right">
+            <div style="color:#fff;font-size:17px;" @click="changeForm()" v-if="changeOn">
+              <img src="../image/commit.png" alt="" style="width:0.44rem;height:0.44rem;margin-top:.5rem">
+            </div>
+            <div style="color:#fff;font-size:17px;" @click="submitForm()" v-else>
+              <img src="../image/commit.png" alt="" style="width:0.44rem;height:0.44rem;margin-top:.5rem">
+            </div>
+          </router-link>
+        </yd-navbar>
+      </div>
+      <div class="big_box">
+        <div class="label_box">
+          <span class="" style="font-size:0.28rem;width:0.8rem;">标签</span>
+          <span>
+            <img v-if="imgChange[0].xuanze" src="../image/label2.png" style="width:0.95rem;height:0.45rem;" alt="">
+            <img @click="selectButtonType(0)" v-else src="../image/label1.png" style="width:0.95rem;height:0.45rem;" alt="">
+          </span>
+          <span>
+            <img v-if="imgChange[1].xuanze" src="../image/label4.png" style="width:0.95rem;height:0.45rem;" alt="">
+            <img @click="selectButtonType(1)" v-else src="../image/label3.png" style="width:0.95rem;height:0.45rem;" alt="">
+          </span>
+          <span>
+            <img v-if="imgChange[2].xuanze" src="../image/label6.png" style="width:0.95rem;height:0.45rem;" alt="">
+            <img @click="selectButtonType(2)" v-else src="../image/label5.png" style="width:0.95rem;height:0.45rem;" alt="">
+          </span>
+          <span>
+            <img v-if="imgChange[3].xuanze" src="../image/label8.png" style="width:0.95rem;height:0.45rem;" alt="">
+            <img @click="selectButtonType(3)" v-else src="../image/label7.png" style="width:0.95rem;height:0.45rem;" alt="">
+          </span>
+          <span>
+            <img v-if="imgChange[4].xuanze" src="../image/label10.png" style="width:0.95rem;height:0.45rem;" alt="">
+            <img @click="selectButtonType(4)" v-else src="../image/label9.png" style="width:0.95rem;height:0.45rem;" alt="">
+          </span>
+        </div>
+
+        <yd-cell-group>
+          <yd-cell-item>
+            <yd-input slot="right" v-model="inputTitle" required :show-success-icon="false" max="" :show-error-icon="false" regex="" placeholder="请输标题"></yd-input>
+          </yd-cell-item>
+        </yd-cell-group>
+
+        <yd-textarea slot="right" placeholder="正文" v-model="content"  ></yd-textarea>
+        <div class="imgGroup">
+          <img :src="item" alt="" v-for="(item,index) in imgGroup" :key="index" @click="deletePicture(index)">
+        </div>
+        <yd-datetime v-show="0 == 1" :start-date="currentdate" ref="datetime" v-model="showDateTIme" ></yd-datetime>
+
+        <div class="position_bottom" ref="input_box" style="background:#fff;position:absolute;">
+          <div class="initBtn" @click="withdraw()">
+            <img src="../image/che1.png" style="width:0.44rem;height:0.44rem;" alt="">
+            <div>撤回</div>
+          </div>
+          <div class="initBtn" @click="changeSelect()">
+            <img src="../image/che.png" style="width:0.44rem;height:0.44rem;" alt="" v-if="!select">
+            <img src="../image/che2.png" style="width:0.44rem;height:0.44rem;" alt="" v-else>
+            <div>待办</div>
+          </div>
+          <div class="initBtn" @click="openTime">
+            <img src="../image/che3on.png" style="width:0.44rem;height:0.44rem;" alt="" v-if="firstShowTime">
+            <img src="../image/che3.png" style="width:0.44rem;height:0.44rem;" alt="" v-else>
+            <div v-if="firstShowTime">取消提醒</div>
+            <div v-else>提醒</div>
+
+          </div>
+          <div class="initBtn" @click="uploadImg()">
+            <img src="../image/che4.png" style="width:0.44rem;height:0.44rem;" alt="">
+            <div>图片</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/ydui.rem.js"></script>
+<script type="text/javascript" src="../script/axios.min.js"></script>
+<script type="text/javascript" src="../script/fastclick.js"></script>
+<script type="text/javascript" src="../script/qs.js"></script>
+
+<script type="text/javascript">
+  var width = document.documentElement.clientWidth;
+
+  var scale = width / 7.5;
+  var css = "html{ font-size: " + scale + "px; ";
+
+  document.write("<style>" + css + "</style>");
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function () {
+      FastClick.attach(document.body);
+    }, false);
+  }
+</script>
+
+<script>
+
+  apiready = function apiready() {
+    new Vue({
+      el: '#app',
+      data: {
+        changeTime: "默认时间",
+        showDateTIme:'',   //选择时间
+        select: false,     //是否代办  
+        inputTitle: '',    //标题
+        timeID: '',
+        currentdate: '',   //默认显示的时间
+        firstShowTime: false,   //切换提醒状态
+        changeOn: false, // 初次提交 和 修改 的状态
+        content: "",      //内容
+        imgGroup: [],     //上传的图片
+        imgChange: [{ xuanze: true }, { xuanze: false }, { xuanze: false }, { xuanze: false }, { xuanze: false }], //判断选择了哪个标签
+      },
+      methods: {
+        //  选择标签
+        selectButtonType: function selectButtonType(id) {
+          var currentI = id;
+          for (var i = 0; i < 5; i++) {
+            this.imgChange[i].xuanze = false
+          }
+          this.imgChange[currentI].xuanze = true
+        },
+        //  撤回
+        withdraw: function withdraw() {
+          if (this.content) {
+            this.content = this.content.substring(0, this.content.length - 1)
+          }
+        },
+        //  切换代办
+        changeSelect: function changeSelect() {
+          this.select = !this.select
+        },
+        //  日期选择
+        openTime: function openTime() {
+          if (!this.firstShowTime) {
+            var that = this;
+            that.getNowFormatDate();
+            that.firstShowTime = true;
+            this.showDateTIme = this.currentdate
+            setTimeout(function () {
+              that.$refs.datetime.open()
+            }, 150);
+          } else {
+            this.firstShowTime = !this.firstShowTime
+          }
+        },
+        //  日期规范
+        getNowFormatDate: function getNowFormatDate() {
+          var cdate = new Date();
+          var date = new Date(cdate.getTime() + 180000)
+          var seperator1 = "/";
+          var empty = ' ';
+          var year = date.getFullYear();
+          var month = date.getMonth() + 1;
+          var strDate = date.getDate();
+          var hours = date.getHours();
+          var minutes = date.getMinutes();
+
+          if (month >= 1 && month <= 9) {
+            month = "0" + month;
+          }
+          if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+          }
+          if (hours >= 0 && hours <= 9) {
+            hours = "0" + hours;
+          }
+          if (minutes >= 0 && minutes <= 9) {
+            minutes = "0" + minutes;
+          }
+          var currentdate = year + seperator1 + month + seperator1 + strDate + empty + hours + ':' + minutes;
+          this.currentdate = currentdate
+          return currentdate;
+        },
+        //上传图片
+        uploadImg: function uploadImg() {
+          var that = this
+          api.actionSheet({
+            title: '上传图片',
+            cancelTitle: '取消',
+            buttons: ['相机', '相册']
+          }, function (ret, err) {
+            var index = ret.buttonIndex;
+            if (index === 3) { // 取消
+              return;
+            }
+            var sourceType = 'album';
+            if (index === 1) { // 打开相机
+              sourceType = 'camera';
+            }
+            api.getPicture({
+              sourceType: sourceType,
+              encodingType: 'jpg',
+              mediaValue: 'pic',
+              quality: 50,
+            }, function (ret, err) {
+              if (ret) {
+                var params = {
+                  img: ret.data,
+                };
+              }
+            });
+          });
+
+        },
+        //删除图片
+        deletePicture: function deletePicture(index) {
+          var that = this
+          var targetIndex = index
+          api.confirm({
+            title: '',
+            msg: '是否删除该图片',
+            buttons: ['否', '是']
+          }, function (ret, err) {
+            var tindex = ret.buttonIndex;
+            if (tindex == 2) {
+              that.imgGroup.splice(targetIndex, 1)
+            }
+          });
+        },
+        //提交
+        submitForm: function submitForm() {
+          var typeList = ['live', 'work', 'study', 'tourism', 'inspiration']
+          var typeSelect
+          var timeId
+          for (var i = 0; i < 5; i++) {
+            if (this.imgChange[i].xuanze) {
+              typeSelect = typeList[i]
+            }
+          }
+          var self = this
+          api.confirm({
+            title: '',
+            msg: '是否保存',
+            buttons: ['否', '是']
+          }, function (ret, err) {
+            var index = ret.buttonIndex;
+            if (index == 2) {
+              if (!self.inputTitle) {
+                api.toast({
+                  msg: '请输入标题哦',
+                  duration: 1000,
+                  location: 'middle'
+                });
+                return
+              }
+              if (!self.content) {
+                api.toast({
+                  msg: '请输入正文内容哦',
+                  duration: 1000,
+                  location: 'middle'
+                });
+                return
+              }
+              if (self.firstShowTime) {
+                self.showDateTIme = self.showDateTIme.replace(/\-/g, "/");
+                var currentDate = new Date().getTime()
+                var targetDate = new Date(String(self.showDateTIme)).getTime()
+                var a = parseInt(targetDate) - parseInt(currentDate)
+
+                if (a <= 0) {
+                  api.toast({
+                    msg: '请重新选择提醒时间哦',
+                    duration: 1000,
+                    location: 'middle'
+                  });
+                  return
+                } else if (a) {
+                  //  设置提醒功能
+                  api.notification({
+                    vibrate: [500, 500],
+                    notify: {
+                      title: self.inputTitle,
+                      content: self.content,
+                    },
+                    alarm: {
+                      time: targetDate
+                    }
+                  }, function (ret, err) {
+                    var id = ret.id;
+                    //  获取提醒id
+                    self.timeID = id
+
+                  });
+                }
+              }
+            }
+          });
+        },
+        comeback_upper(){
+          api.closeWin();
+        }
+      },
+      mounted: function mounted() {
+
+      },
+    });
+  };
+
+
+</script>
+
+</html>

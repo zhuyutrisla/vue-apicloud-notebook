@@ -1,0 +1,230 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+  />
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>搜索</title>
+  <link rel="stylesheet" type="text/css" href="../css/api.css" />
+  <link rel="stylesheet" type="text/css" href="../css/ydui.rem.css" />
+  <link rel="stylesheet" type="text/css" href="../css/normal.css" />
+  <link rel="stylesheet" type="text/css" href="../css/search.css" />
+</head>
+
+<body>
+  <div id="app" v-cloak>
+    <header class="tophead">
+      <span class="headWord" @click="returnToHome">
+        <img src="../image/left.png" alt="">
+      </span>
+      <yd-input v-model="searchword" :show-success-icon="false" :show-error-icon="false" :show-clear-icon='false' placeholder="请输入关键字"></yd-input>
+      <span class="headImg" v-if="searchword" @click="clearSearchWord()">
+        <img src="../image/deleteWord.png" alt="" srcset="">
+      </span>
+    </header>
+    <div class="label_box">
+      <span class="" style="font-size:0.28rem;width:0.8rem;">标签</span>
+      <span @click="selectTab(0)">
+        <img src="../image/label1.png" style="width:0.95rem;height:0.45rem;" alt="" v-if="!tabGroup[0].select">
+        <img src="../image/label2.png" style="width:0.95rem;height:0.45rem;" alt="" v-else>
+      </span>
+      <span @click="selectTab(1)">
+        <img src="../image/label3.png" style="width:0.95rem;height:0.45rem;" alt="" v-if="!tabGroup[1].select">
+        <img src="../image/label4.png" style="width:0.95rem;height:0.45rem;" alt="" v-else>
+      </span>
+      <span @click="selectTab(2)">
+        <img src="../image/label5.png" style="width:0.95rem;height:0.45rem;" alt="" v-if="!tabGroup[2].select">
+        <img src="../image/label6.png" style="width:0.95rem;height:0.45rem;" alt="" v-else>
+      </span>
+      <span @click="selectTab(3)">
+        <img src="../image/label7.png" style="width:0.95rem;height:0.45rem;" alt="" v-if="!tabGroup[3].select">
+        <img src="../image/label8.png" style="width:0.95rem;height:0.45rem;" alt="" v-else>
+      </span>
+      <span @click="selectTab(4)">
+        <img src="../image/label9.png" style="width:0.95rem;height:0.45rem;" alt="" v-if="!tabGroup[4].select">
+        <img src="../image/label10.png" style="width:0.95rem;height:0.45rem;" alt="" v-else>
+      </span>
+    </div>
+    <section class="contain">
+      <div class="thingWrapper" v-for="(item,index) in thingGroup" :key="index" v-if="thingGroup.length">
+        <div class="allthing">
+          <div class="tabinitThing" :class="item.classify">
+            <h3 class="initTitle">
+              <img src="../image/rednoselect.png" alt="" v-if="item.backlog == 2 && item.cstatus == 1" @click='changeHandle(index)'>
+              <img src="../image/redselect.png" alt="" v-if="item.backlog == 2 && item.cstatus == 2" @click='changeHandle(index)'>
+              <span @click="gotoDetail(index)">{{item.header}}</span>
+            </h3>
+            <div class="contentwrapper" @click="gotoDetail(index)">
+              <p class="initContent" :class="{ handle: item.backlog == 2 && item.cstatus == 2 }">{{item.body}}</p>
+              <img :src="item.img" alt="" v-if="item.img">
+            </div>
+            <span class="tabmessageIcon">
+              <img src="../image/message.png" alt="" srcset="" v-if="item.notice">
+              <img src="../image/picture.png" alt="" srcset="" v-if="item.img">
+            </span>
+            <span class="tabinitTime">{{item.ctime}}</span>
+          </div>
+        </div>
+      </div>
+      <div v-if="showNothing" class="noThing">
+        <img src="../image/nosearch.png" alt="" srcset="">
+        <p>未找到相关内容</p>
+      </div>
+    </section>
+    <footer v-if="showDelete">
+      <div @click="deleteIcon()">
+        <img src="../image/deleteicon.png" alt="" srcset="">
+      </div>
+    </footer>
+  </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript" src="../script/ydui.rem.js"></script>
+<script type="text/javascript" src="../script/fastclick.js"></script>
+<script type="text/javascript">
+  var width = document.documentElement.clientWidth;
+
+  var scale = width / 7.5;
+  var css = "html{ font-size: " + scale + "px; ";
+
+  document.write("<style>" + css + "</style>");
+
+  if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function () {
+      FastClick.attach(document.body);
+    }, false);
+  }
+</script>
+<script type="text/javascript">
+  apiready = function () {
+    api.setStatusBarStyle({
+      style: 'light',
+      color: '#fff'
+    })
+    var fvm = new Vue({
+      el: '#app',
+      data: {
+        listFirst: true,
+        showDelete: false,
+        tabGroup: [
+          { select: true },
+          { select: false },
+          { select: false },
+          { select: false },
+          { select: false },
+        ],
+        ishandle: true,
+        showNothing: false,
+        count: 0,
+        typeName: '',
+        searchword: '',
+        thingGroup: [
+          {
+            "header": "待办事项",   // 记事标题
+            "body": "打扫房子吧，懒虫一号",  // 记事内容
+            "classify": "live", // 分类
+            "backlog": "1",  // 待办状态1、不是待办2、是待办
+            "ntime": "2018-10-2 17:00",  // 提醒时间
+            "img": "",  // 图片地址
+            "ctime": "2018-01-12 18:03:49"  // 创建时间
+          }
+        ]
+      },
+      watch: {
+        searchword: function () {
+          if (this.searchword) {
+            this.getWord()
+          }
+        }
+      },
+      methods: {
+        returnToHome: function returnToHome() {
+          api.sendEvent({
+            name: 'reloadHome'
+          });
+          api.closeWin()
+        },
+        //选择标签
+        selectTab: function (e) {
+          for (var i = 0; i < this.tabGroup.length; i++) {
+            this.tabGroup[i].select = false
+          }
+          this.tabGroup[e].select = true
+          var typeList = ['live', 'work', 'study', 'tourism', 'inspiration']
+          this.typeName = typeList[e]
+          this.getWord()
+
+        },
+        //改变代办
+        changeHandle: function changeHandle(index) {
+          var bindex = index
+          var self = this
+          if (this.thingGroup[bindex].cstatus == 1) {
+            api.confirm({
+              title: '提示',
+              msg: '是否把该待办事项切换成已完成状态',
+              buttons: ['取消', '确定']
+            }, function (ret, err) {
+              var index = ret.buttonIndex;
+              if (index == 2) {
+                //todo
+              }
+            });
+          } else {
+            api.confirm({
+              title: '提示',
+              msg: '是否把该待办事项切换成未完成状态',
+              buttons: ['取消', '确定']
+            }, function (ret, err) {
+              var index = ret.buttonIndex;
+
+              if (index == 2) {
+                //todo
+              }
+
+            });
+          }
+        },
+        clearSearchWord: function clearSearchWord() {
+          this.searchword = ''
+          for (var i = 0; i < this.tabGroup.length; i++) {
+            this.tabGroup[i].select = false
+          }
+          this.typeName = ''
+          this.thingGroup = []
+        },
+        //搜索
+        getWord: function getWord() {
+          //todo
+        },
+        //进入详情
+        gotoDetail: function gotoDetail(index) {
+          var that = this
+          api.openWin({
+            name: 'editPage',
+            url: './editPage.html',
+            bounces: false,
+            pageParam: { id: that.thingGroup[index].tid, type: 'key' },
+            rect: {
+              x: 0,
+              y: 0,
+              w: 'auto',
+              h: 'auto'
+            }
+          });
+        },
+
+
+      },
+      mounted: function mounted() {
+        this.typeName = 'live'
+      }
+    });
+  };
+
+</script>
+
+</html>

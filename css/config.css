@@ -1,0 +1,102 @@
+
+		.my_container {
+			position: relative;
+			padding-bottom: 1.1rem;
+			padding-top: 1.28rem;
+		}
+
+		.my_container .header_top {
+			width: 100%;
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 1000;
+			padding-top: 0.28rem;
+			background-color: #1CBB9D;
+		}
+
+		.my_container {
+			position: relative;
+		}
+
+		.click_right {
+			background-color: #fff;
+			padding: 0 0.2rem;
+			margin-top: auto;
+			margin-bottom: auto;
+		}
+
+		.click_right_box {
+			padding-right: 0.12rem;
+			border-bottom: 1px solid #eee;
+			height: 100%;
+			background-color: #fff;
+			height: 0.9rem;
+			line-height: 0.9rem;
+			position: relative;
+		}
+
+		.click_right_box .red_div {
+			width: 0.16rem;
+			height: 0.16rem;
+			border-radius: 50%;
+			float: right;
+			background-color: red;
+			color: red;
+			position: absolute;
+			top: 0.36rem;
+			right: 0.6rem;
+		}
+
+		.click_right_box span {
+			color: rgb(51, 51, 51);
+			font-size: 15px;
+		}
+
+		.click_right_box .size {
+			float: right;
+			padding-right: 0.1rem;
+			color: rgb(153, 153, 153);
+			font-size: 12px;
+		}
+
+		.click_right .img_box {
+			float: right;
+			width: 0.44rem;
+			height: 100%;
+			position: relative;
+		}
+
+		.click_right .img_box img {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			overflow: hidden;
+			background-color: #fff;
+			-webkit-transition-property: -webkit-transform, opacity;
+			transition-property: transform, opacity;
+			transform: translate(-50%, -50%);
+		}
+
+		.headWordImg {
+			position: relative;
+			top: .08rem;
+			padding-top: .3rem;
+			height: .7rem;
+		}
+
+		.headWordShow {
+			color: #fff;
+			font-size: 17px;
+			position: relative;
+			bottom: .015rem;
+		}
+
+		.showbox {
+			width: 95%;
+			line-height: .34rem;
+			font-size: 14px;
+			background: #fff;
+			padding-bottom: .2rem;
+			color: #999;
+		}
