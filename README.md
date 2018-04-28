@@ -19,15 +19,15 @@ git clone git@github.com:zhuyutrisla/vue-apicloud-notebook.git
 
 
 #### 项目效果如下
-<image src='./pubilc/home.png' style='width: 375px;'></image>
+<image src='./pubilc/home.png' width = "300"></image>
 <p>首页样式一</p>
-<image src='./pubilc/home2.png' style='width: 375px;'></image>
+<image src='./pubilc/home2.png' width = "300"></image>
 <p>首页样式二</p>
-<image src='./pubilc/edit.png' style='width: 375px;'></image>
+<image src='./pubilc/edit.png' width = "300"></image>
 <p>编辑页面</p>
-<image src='./pubilc/search.png' style='width: 375px;'></image>
+<image src='./pubilc/search.png' width = "300"></image>
 <p>搜索页面</p>
-<image src='./pubilc/config.png' style='width: 375px;'></image>
+<image src='./pubilc/config.png' width = "300"></image>
 <p>设置页面</p>
 
 #### 项目所使用的Apicloud模块:
